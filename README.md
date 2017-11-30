@@ -22,10 +22,10 @@ This will perform the following actions:
   Server repository
 * Copy the latest system profile definition from
   https://github.com/container-images/boltron-27
-* Retrieves a tarball containing a repository with two streams of the Node.js
-  module from https://sgallagh.fedorapeople.org/nodejs-modular-repo.tar.gz,
-  extracts it and configures DNF to use it as an enabled repository.
-  
+* Configures DNF to use Adam Samalik's
+  [modular test repo](https://asamalik.fedorapeople.org/modularity-hybrid-demo/repos/modules/)
+  as an enabled repository.
+
 ## Testing it out
 SSH into the modified system and play around with `dnf module` commands. For
 example:
