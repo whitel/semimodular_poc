@@ -34,24 +34,11 @@
     disablerepo: fedora,updates
     enablerepo: fedora-modular-server
 
-- name: Create local repo directory
-  file:
-    path: /opt/repo
-    state: directory
-    mode: 0755
-
-- name: Copy and extract repo
-  unarchive:
-    src: https://sgallagh.fedorapeople.org/nodejs-modular-repo.tar.gz
-    dest: /opt/repo
-    creates: /opt/repo/modules.yaml
-    remote_src: yes
-
-- name: Create local repo definition
+- name: Enable prototype module repository
   yum_repository:
-    name: local-modules
+    name: test-modules
     description: Test repo for modules
-    baseurl: file:///opt/repo
+    baseurl: https://asamalik.fedorapeople.org/modularity-hybrid-demo/repos/modules/
     priority: 90
     gpgcheck: no
     enabled: yes
