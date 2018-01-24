@@ -1,0 +1,4 @@
+[reviewboard]
+name=reviewboard
+stream=2.5
+profile=default

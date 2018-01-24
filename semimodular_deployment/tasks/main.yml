@@ -3,7 +3,7 @@
   dnf:
     name: libselinux-python
     state: present
-    disablerepo: fedora-modular-server,fedora-modular-server-updates-testing
+    disablerepo: fedora-modular,fedora-dnf-copr
 
 - name: Create system profile directory
   file:
@@ -11,34 +11,30 @@
     state: directory
     mode: 0755
 
-- name: Download latest F27 system profile
-  get_url:
-    url: https://raw.githubusercontent.com/container-images/boltron-27/master/base-27.defaults
+- name: Drop in Review Board system profile
+  copy:
+    src: files/reviewboard.defaults
     dest: /etc/dnf/modules.defaults.d/
     mode: 0644
     force: yes
 
-- name: Add the Modular Server repo to install modular-aware DNF
+- name: Add the Modular DNF COPR repo to install modular-aware DNF
   yum_repository:
-    name: fedora-modular-server
-    description: Fedora Modular Server
-    mirrorlist: https://mirrors.fedoraproject.org/metalink?repo=modular-fedora-server-f$releasever&arch=$basearch
+    name: fedora-dnf-copr
+    description: Fedora Modular DNF
+    baseurl: https://copr-be.cloud.fedoraproject.org/results/mhatina/dnf-modularity-stable/fedora-rawhide-$basearch/
     gpgcheck: no
     priority: 90
-    enabled: no
+    enabled: yes
 
-- name: Install DNF from the Modular Server Repo
-  dnf:
-    name: dnf
-    state: latest
-    disablerepo: fedora,updates
-    enablerepo: fedora-modular-server
+- name: Install DNF from COPR
+  command: dnf -y distro-sync *dnf*
 
 - name: Enable prototype module repository
   yum_repository:
-    name: test-modules
+    name: fedora-modular
     description: Test repo for modules
-    baseurl: https://asamalik.fedorapeople.org/modularity-hybrid-demo/repos/modules/
+    baseurl: https://sgallagh.fedorapeople.org/repo/devconf2017/x86_64/os/
     priority: 90
     gpgcheck: no
     enabled: yes
