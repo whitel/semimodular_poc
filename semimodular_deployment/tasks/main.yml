@@ -35,6 +35,5 @@
     name: fedora-modular
     description: Test repo for modules
     baseurl: https://sgallagh.fedorapeople.org/repo/devconf2017/x86_64/os/
-    priority: 90
     gpgcheck: no
     enabled: yes
