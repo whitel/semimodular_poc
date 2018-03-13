@@ -8,9 +8,10 @@ COPY semimodular-play.yml /playbooks/
 RUN ansible-playbook -i "localhost," -c local /playbooks/semimodular-play.yml
 
 #belongs in the playbook, but gpg checking can not seem to be disabled
-RUN dnf update -y --disablerepo "*" --enablerepo "updates-testing" --nogpgcheck fedora-repos \
+RUN dnf update -y --nogpgcheck dnf \
     && dnf clean all
 
 #belongs in the playbook, but gpg checking can not seem to be disabled
-RUN dnf update -y dnf \
+RUN dnf install -y --enablerepo "updates-testing" --nogpgcheck  fedora-repos-modular \
     && dnf clean all
+
