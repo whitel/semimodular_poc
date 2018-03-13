@@ -1,9 +1,9 @@
 ---
-- name: Install SELinux files
-  dnf:
-    name: libselinux-python
-    state: present
-    disablerepo: fedora-modular-server,fedora-modular-server-updates-testing
+# - name: Install SELinux files
+#   dnf:
+#     name: libselinux-python
+#     state: present
+#     disablerepo: fedora-modular-server,fedora-modular-server-updates-testing
 
 - name: Create system profile directory
   file:
@@ -11,34 +11,23 @@
     state: directory
     mode: 0755
 
-- name: Download latest F27 system profile
-  get_url:
-    url: https://raw.githubusercontent.com/container-images/boltron-27/master/base-27.defaults
-    dest: /etc/dnf/modules.defaults.d/
-    mode: 0644
-    force: yes
+- name: Move system profile to appropriate directory
+  copy: src=base-28.defaults dest=/etc/dnf/modules.defaults.d/base-28.defaults 
 
-- name: Add the Modular Server repo to install modular-aware DNF
-  yum_repository:
-    name: fedora-modular-server
-    description: Fedora Modular Server
-    mirrorlist: https://mirrors.fedoraproject.org/metalink?repo=modular-fedora-server-f$releasever&arch=$basearch
-    gpgcheck: no
-    priority: 90
-    enabled: no
+#this does not seem to work, disable_gpg_check not being honored?
+# also, i need "dnf update" and this runs "dnf install"
+# - name: Install correct repos from updates-testing
+#   dnf:
+#     name: fedora-repos
+#     state: latest
+#     disablerepo: '*'
+#     enablerepo: updates-testing
+#     disable_gpg_check: yes
 
-- name: Install DNF from the Modular Server Repo
-  dnf:
-    name: dnf
-    state: latest
-    disablerepo: fedora,updates
-    enablerepo: fedora-modular-server
-
-- name: Enable prototype module repository
-  yum_repository:
-    name: test-modules
-    description: Test repo for modules
-    baseurl: https://asamalik.fedorapeople.org/modularity-hybrid-demo/repos/modules/
-    priority: 90
-    gpgcheck: no
-    enabled: yes
+#this does not seem to work, disable_gpg_check not being honored?
+# also, i need "dnf update" and this runs "dnf install"
+# - name: Install latest DNF
+#   dnf:
+#     name: dnf
+#     state: latest
+#     disable_gpg_check: yes
