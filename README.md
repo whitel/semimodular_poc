@@ -1,10 +1,31 @@
-# Modularity atop F27 Traditional
+# Official Modular Repo atop F28 Traditional
 
-This Ansible playbook will demo that modules can be layered atop a standard
-Fedora Server Edition installation.
+A container that provides the pre-alpha of Fedora 28 which will provide modules in a separate repository. The container should be fully enabled. 
 
-## Prerequisites
-* Install Fedora 27 Server Edition on a virtual or physical system using the
+# Directions for use
+
+```
+$ docker run --rm -it langdon/addon-modular-boltron /bin/bash
+# dnf module list
+```
+
+# Basic Examples
+
+## Install the default nodejs
+
+```# dnf install nodejs```
+
+## Install a non-default default version of nodejs
+
+```# dnf install @nodejs:6```
+
+## Install a non-default profile of nodejs
+
+```# dnf install @nodejs/development```
+
+# Making your own
+
+* Install Fedora 28 Server Edition on a virtual or physical system using the
   standard install media. Run this on a disposable installation; it changes
   core system functionality (DNF) and may cause heartbreak if used on
   critical systems.
@@ -18,15 +39,11 @@ ansible-playbook -i <host_inventor_file> semimodular-play.yml
 ```
 
 This will perform the following actions:
-* Install a version of DNF that is module-aware from the Fedora 27 Modular
-  Server repository
-* Copy the latest system profile definition from
-  https://github.com/container-images/boltron-27
-* Configures DNF to use Adam Samalik's
-  [modular test repo](https://asamalik.fedorapeople.org/modularity-hybrid-demo/repos/modules/)
-  as an enabled repository.
+* Install a version of DNF that is module-aware from the Fedora 28 repository
+* Copy the latest system profile definition from the files directory
+* Configures DNF to use the modular repository by way of installing the fedora-repos-modular package.
 
-## Testing it out
+# More Advanced Testing & Examples
 SSH into the modified system and play around with `dnf module` commands. For
 example:
 
