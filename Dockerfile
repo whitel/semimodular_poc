@@ -1,4 +1,4 @@
-FROM fedora-minimal:28
+FROM registry.fedoraproject.org/fedora-minimal:28
 RUN sed -i -e 's/gpgcheck=1/gpgcheck=0/g' /etc/yum.repos.d/*
 RUN microdnf install -y dnf ansible
 RUN mkdir /playbooks/
