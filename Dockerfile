@@ -6,3 +6,9 @@ COPY semimodular_deployment /playbooks/semimodular_deployment
 COPY semimodular-play.yml /playbooks/
 
 RUN ansible-playbook -i "localhost," -c local /playbooks/semimodular-play.yml
+
+RUN mkdir /local-modules
+ADD start.sh /start.sh
+RUN chmod a+x /start.sh
+VOLUME /local-modules
+CMD /start.sh
