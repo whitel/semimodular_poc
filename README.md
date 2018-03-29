@@ -5,9 +5,18 @@ A container that provides the pre-alpha of Fedora 28 which will provide modules 
 # Directions for use
 
 ```
-$ docker run --rm -it langdon/addon-modular-boltron /bin/bash
+$ docker run --rm -it docker.io/langdon/addon-modular-boltron
 # dnf module list
 ```
+
+# You can also now make your local module builds available 
+```
+$ docker run --rm -it $HOME/modulebuild/builds/:/local-modules:z docker.io/langdon/addon-modular-boltron
+Making module-bind-9-20180328194441 repo available #(for example)
+Making module-postgresql-9.6-20180328190827 repo available #(for example)
+# dnf module list 
+```
+
 
 # Basic Examples
 
