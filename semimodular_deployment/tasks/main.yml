@@ -5,24 +5,15 @@
 #     state: present
 #     disablerepo: fedora-modular-server,fedora-modular-server-updates-testing
 
-- name: Create system profile directory
-  file:
-    path: /etc/dnf/modules.defaults.d
-    state: directory
-    mode: 0755
-
-- name: Move system profile to appropriate directory
-  copy: src=base-28.defaults dest=/etc/dnf/modules.defaults.d/base-28.defaults 
-
-- name: Install latest DNF
-  dnf:
-    name: dnf
-    state: latest
-    disable_gpg_check: yes
-
-- name: Install correct repos from updates-testing
+- name: Install modular repos
   dnf:
     name: fedora-repos-modular
     state: latest
-    enablerepo: updates-testing
     disable_gpg_check: yes
+
+- name: upgrade all packages
+  dnf:
+    name: "*"
+    state: latest
+ 
+

@@ -1,6 +1,7 @@
 FROM registry.fedoraproject.org/fedora-minimal:28
-RUN sed -i -e 's/gpgcheck=1/gpgcheck=0/g' /etc/yum.repos.d/*
-RUN microdnf install -y dnf ansible
+#RUN sed -i -e 's/gpgcheck=1/gpgcheck=0/g' /etc/yum.repos.d/*
+RUN microdnf update -y && microdnf clean all
+RUN microdnf install -y dnf ansible && microdnf clean all
 RUN mkdir /playbooks/
 COPY semimodular_deployment /playbooks/semimodular_deployment
 COPY semimodular-play.yml /playbooks/
