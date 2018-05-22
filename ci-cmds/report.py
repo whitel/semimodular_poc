@@ -92,14 +92,17 @@ def main():
                 if beg != d[0]:
                     print "Error:", nfn, beg, d[0]
                 tests.extend(d[1])
-        else:
+        elif os.path.exists(fn):
             num += 1
-            d = parse_file()
+            d = parse_file(fn)
             if beg is None:
                 beg = d[0]
             if beg != d[0]:
                 print "Error:", fn, beg, d[0]
             tests.extend(d[1])
+        else:
+            print >>sys.stderr, " No such file or directory:", fn
+            continue
 
     # print "JDBG:", tests
     print "Files:", num
