@@ -24,7 +24,7 @@ while true; do
     ./image-info.sh $img
     ./test-info.sh  $img
 
-    pass="$(./report.py $img/$imgid | fgrep Pass | head -1 | awk '{ print $2 }')"
+    pass="$(./report.py $img/$nimgid | fgrep Pass | head -1 | awk '{ print $2 }')"
     if [ "x$pass" != "x0" ]; then
       ln -sf "$imgid" "$img/tested"
       sudo docker tag $img:$imgid $img:tested
