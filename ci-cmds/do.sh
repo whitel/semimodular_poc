@@ -26,9 +26,10 @@ while true; do
 
     pass="$(./report.py $img/$nimgid | fgrep Pass | head -1 | awk '{ print $2 }')"
     if [ "x$pass" != "x0" ]; then
-      ln -sf "$imgid" "$img/tested"
-      sudo docker tag $img:$imgid $img:tested
-      sudo docker push $img:tested
+      ln -sf "$nimgid" "$img/tested"
+      sudo docker tag $nimgid $img:tested
+      echo "Pushing tested tag."
+      sudo docker push $img:tested || true
     fi
   fi
   imgid="$nimgid"
