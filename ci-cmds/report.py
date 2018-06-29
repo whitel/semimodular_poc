@@ -3,6 +3,8 @@
 import os
 import sys
 
+html = False
+
 def _ui_num(num):
     num = str(num)
     if len(num) ==  4:
@@ -73,10 +75,16 @@ def parse_file(fn):
     return beg, tests
 
 def main():
-    if len(sys.argv) < 2:
-        print >>sys.stderr, "Usage: file|dir"
-        sys.exit(1)
-    
+    def usage():
+        if len(sys.argv) < 2:
+            print >>sys.stderr, "Usage: [html] file|dir"
+            sys.exit(1)
+    usage()
+    if sys.argv[1] == 'html':
+        html = True
+        sys.argv = sys.argv[0:1] + sys.argv[2:]
+    usage()
+
     beg = None
     tests = []
     num = 0
@@ -103,7 +111,56 @@ def main():
         else:
             print >>sys.stderr, " No such file or directory:", fn
             continue
+    if html:
+        prnt_html(beg, num, tests)
+    else:
+        prnt_text(beg, num, tests)
 
+def prnt_html(beg, num, tests):
+    print "<h2>Tests:", len(tests), "</h2>"
+    print "<dl>"
+    print "<dt>", "Failures", "</dt>", "<dd>", len([x for x in tests if x[0]['res'] != 'pass'])
+    print "</dd>"
+    print "<dt>", "Passes", "</dt>", "<dd>", len([x for x in tests if x[0]['res'] == 'pass'])
+    print "</dd></dl>"
+    print "<h2>", "Modules:", len(set((x[0]['modn'] for x in tests))), "</h2>"
+    print "<dl>"
+    print "<dt>", "Failures", "</dt>", "<dd>", len(set((x[0]['modn'] for x in tests if x[0]['res'] != 'pass')))
+    print "</dd>"
+    print "<dt>", "Passes", "</dt>", "<dd>", len(set((x[0]['modn'] for x in tests if x[0]['res'] == 'pass')))
+    print "</dd></dl>"
+
+    print "<h2> Modules </h2>"
+    print "<table class=\"pure-table pure-table-striped\">"
+    print "<thead>"
+    print "<tr> <th> Name </th><th> Stream </th><th> Profile </th>"
+    print "<th> Result </th> <th> Packages </th> <th> Size </th> </tr>"
+    print "</thead>"
+
+    print "<tbody>"
+    for tst, res in tests:
+        if tst['res'] == 'pass':
+            print "<tr class=\"pass\">"
+        elif 'SYS' in tst['res']:
+            print "<tr class=\"sysfail\">"
+        else:
+            print "<tr class=\"fail\">"
+        print "<td> %s </td>" % (tst['modn'])
+        print "<td> %s </td>" % (tst['mods'])
+        print "<td> %s </td>" % (tst['modp'])
+        if tst['res'] == 'pass':
+            print "<td> Pass </td>"
+            print " <td> %s </td> " % _ui_num(res['pkgs'] - beg['pkgs']),
+            print " <td> %s </td> </tr>" % _ui_num(res['size'] - beg['size'])
+        else:
+            print "<td> %s </td>" % tst['res']
+            print "<td> </td>" 
+            print "<td> </td>" 
+            print "</tr>" 
+    print "</tbody>"
+    print "</table>"
+
+def prnt_text(beg, num, tests):
     # print "JDBG:", tests
     print "Files:", num
     print "Tests:", len(tests)
