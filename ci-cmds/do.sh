@@ -11,6 +11,10 @@ imgid="$($dock images -q $img | head -1)"
 
 if [ ! -d "$img/$imgid" ]; then
   imgid="<none>"
+  if [ -h "$img/latest" ]; then
+    imgid="$(readlink $img/latest)"
+    echo "Last IMG: $img:$imgid"
+  fi
 else
   echo "OLD IMG: $img:$imgid"
 fi
@@ -28,9 +32,13 @@ while true; do
     if [ "x$pass" != "x0" ]; then
       ln -sf "$nimgid" "$img/tested"
       sudo docker tag $nimgid $img:tested
-      echo "Pushing tested tag."
-      sudo docker push $img:tested || true
+      # sudo docker tag $nimgid $img:tested-$(date --iso)-$pass
+      echo "Pushing tested tags."
+      sudo docker push $img || true
     fi
+    rm -f "$img/prev"
+    mv "$img/latest" "$img/prev" || true
+    ln -sf "$nimgid" "$img/tested"
   fi
   imgid="$nimgid"
   ln -sf "$imgid" "$img/latest"
